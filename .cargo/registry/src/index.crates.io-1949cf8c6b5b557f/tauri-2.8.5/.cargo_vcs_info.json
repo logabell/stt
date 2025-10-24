@@ -1,0 +1,6 @@
+{
+  "git": {
+    "sha1": "80eadb7387459639037e3a279c61c9631b1dafe7"
+  },
+  "path_in_vcs": "crates/tauri"
+}
