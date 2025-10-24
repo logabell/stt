@@ -307,6 +307,7 @@
 > push-to-talk/
 > ├─ app/
 > │ ├─ src-tauri/ # Rust backend
+> │ │ ├─ tauri.conf.json
 > │ │ ├─ audio/ # WASAPI + APM + dtln
 > │ │ ├─ vad/ # Silero ONNX
 > │ │ ├─ asr/ # sherpa-onnx + whisper backend
@@ -316,8 +317,7 @@
 > │ │ ├─ core/ # orchestration, state, channels
 > │ │ └─ Cargo.toml
 > │ ├─ src/ # React/TS frontend
-> │ ├─ package.json
-> │ └─ tauri.conf.json
+> │ └─ package.json
 > └─ ci/
 >   ├─ build-webrtc-apm.ps1
 >   ├─ fetch-onnxruntime.yml
@@ -342,6 +342,9 @@
 > - **DirectML Runtime:** Bundle ORT DirectML DLLs matching GPU drivers.  
 > - **Code Signing:** Sign MSI/MSIX to prevent AV false positives.  
 > - **Model Downloads:** Deferred to first run to keep installer < 100 MB.  
+> - **Windows LLVM Toolchain:** `llama_cpp_sys` depends on `libclang.dll`, so install LLVM/Clang and export `LIBCLANG_PATH` to its `bin` folder (e.g. `C:\Program Files\LLVM\bin`).  
+> - **GNU Build Utilities:** WebRTC APM depends on `libtoolize`/`pkg-config`—install MSYS2 and add `C:\msys64\ucrt64\bin;C:\msys64\usr\bin` to `PATH`, then `pacman -S --needed mingw-w64-ucrt-x86_64-{toolchain,libtool,pkg-config,autoconf,automake}`.  
+> - **`llvm-nm` Availability:** Ensure `C:\Program Files\LLVM\bin` is on `PATH` (or set `NM_PATH` to `llvm-nm.exe`) so `llama_cpp_sys` can locate the symbol table tool.  
 >   
 > ---
 >   
