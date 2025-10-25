@@ -61,3 +61,6 @@ llama-polish = ["llama_cpp"]
 webrtc-apm = ["webrtc-audio-processing"]
 enhanced-denoise = ["deep_filter"]
 windows-accessibility = ["windows"]
+
+[patch.crates-io]
+webrtc-audio-processing-sys = { path = "../vendor/webrtc-audio-processing-sys" }

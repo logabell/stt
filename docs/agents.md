@@ -343,7 +343,7 @@
 > - **Code Signing:** Sign MSI/MSIX to prevent AV false positives.  
 > - **Model Downloads:** Deferred to first run to keep installer < 100 MB.  
 > - **Windows LLVM Toolchain:** `llama_cpp_sys` depends on `libclang.dll`, so install LLVM/Clang and export `LIBCLANG_PATH` to its `bin` folder (e.g. `C:\Program Files\LLVM\bin`).  
-> - **GNU Build Utilities:** WebRTC APM depends on `libtoolize`/`pkg-config`—install MSYS2 and add `C:\msys64\ucrt64\bin;C:\msys64\usr\bin` to `PATH`, then `pacman -S --needed mingw-w64-ucrt-x86_64-{toolchain,libtool,pkg-config,autoconf,automake}`.  
+> - **GNU Build Utilities:** WebRTC APM depends on `libtoolize`/`pkg-config`—install MSYS2 and add `C:\msys64\ucrt64\bin;C:\msys64\usr\bin` to `PATH`, then `pacman -S --needed mingw-w64-ucrt-x86_64-{toolchain,libtool,pkg-config}` plus the MSYS `autoconf/automake`. Set `MSYS2_SHELL` (default `C:\msys64\usr\bin\bash.exe`) so the patched build script can fall back to the MSYS2 shell when those commands are only available as scripts.  
 > - **`llvm-nm` Availability:** Ensure `C:\Program Files\LLVM\bin` is on `PATH` (or set `NM_PATH` to `llvm-nm.exe`) so `llama_cpp_sys` can locate the symbol table tool.  
 >   
 > ---

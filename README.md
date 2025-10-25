@@ -25,10 +25,21 @@ Initial scaffolding for the Push-to-Talk speech-to-text desktop application desc
      [Environment]::SetEnvironmentVariable("PATH", $env:PATH + ";C:\Program Files\LLVM\bin", "User")
      ```
      Alternatively set `NM_PATH` directly: `[Environment]::SetEnvironmentVariable("NM_PATH", "C:\Program Files\LLVM\bin\llvm-nm.exe", "User")`.
-5. Install [MSYS2](https://www.msys2.org/) (provides `libtoolize`, `pkg-config`, etc.). From an MSYS2 UCRT64 shell run:  
-   `pacman -Syu --noconfirm` (twice if prompted), then  
-   `pacman -S --needed --noconfirm mingw-w64-ucrt-x86_64-{toolchain,libtool,pkg-config,autoconf,automake}`  
-   Add `C:\msys64\ucrt64\bin` and `C:\msys64\usr\bin` to your system `PATH` so Cargo can find these tools when building.  
+5. Install [MSYS2](https://www.msys2.org/) for the GNU build utilities (`libtoolize`, `aclocal`, `automake`, `autoconf`, `pkg-config`, `m4`). In the MSYS2 **UCRT64** shell run:  
+   ```
+   pacman -Syu --noconfirm          # repeat if prompted to restart shell
+   pacman -S --needed --noconfirm mingw-w64-ucrt-x86_64-toolchain mingw-w64-ucrt-x86_64-libtool mingw-w64-ucrt-x86_64-pkg-config
+   pacman -S --needed --noconfirm autoconf automake
+   ```  
+   Then, from PowerShell:  
+   ```powershell
+   $msysUsr  = 'C:\msys64\usr\bin'
+   $msysUcrt = 'C:\msys64\ucrt64\bin'
+   $env:PATH = "$msysUcrt;$msysUsr;$env:PATH"
+   [Environment]::SetEnvironmentVariable('PATH', "$msysUcrt;$msysUsr;$env:PATH", 'User')
+   [Environment]::SetEnvironmentVariable('MSYS2_SHELL', 'C:\msys64\usr\bin\bash.exe', 'User')
+   ```  
+   (Open a new PowerShell window and verify `where libtoolize` works.)
 6. Install [Node.js 18+](https://nodejs.org/) and enable Corepack (`corepack enable`) or install Yarn globally (`npm install -g yarn`).
 7. Inside `app/`, run `yarn install` to fetch the frontend dependencies.
 
@@ -38,6 +49,7 @@ Once the prerequisites are installed you can iterate entirely from PowerShell or
 - `yarn tauri build` produces a signed bundle (MSI/MSIX by default) that you can double-click to install.
 - When making iterative changes, leave `yarn tauri dev` running; edits in `app/src` or `app/src-tauri` will rebuild automatically.
 - If the Rust build fails because `yarn` didn't generate the Vite assets yet, run `yarn build` once or restart `yarn tauri dev`.
+  - WebRTC audio processing is part of the default feature set, so the MSYS2 binaries above are required on Windows. If you need to temporarily bypass it (e.g., before MSYS2 is configured) run `yarn tauri dev --no-default-features --features audio,hud,models,real-audio,asr-sherpa,llama-polish,vad-silero`.
 
 ## Development (planned cross-platform)
 
